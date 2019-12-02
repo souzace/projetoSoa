@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var xml = require('xml');
+
 var builder = require('xmlbuilder');
 
 var usersObj = [
