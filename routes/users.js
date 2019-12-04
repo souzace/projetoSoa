@@ -27,6 +27,24 @@ router.get('/', function(req, res, next) {
 });
 
 
+router.post('/', function(req, res, next) {
+  
+  var id = usersObj.length + 1;
+  usersObj.push({
+    id: id,
+    name: req.body.name,
+    email: req.body.email,  
+  });
+
+  console.log(usersObj);
+  res.send({
+    id: id,
+    name: req.body.name,
+    email: req.body.email,  
+  }); 
+});
+
+
 router.get('/:id', function(req, res, next) {
   
   var user = builder.create('user', { encoding: 'utf-8' });
@@ -41,10 +59,10 @@ router.get('/:id', function(req, res, next) {
   userXml.ele('name',  userObj[0].name);
   userXml.ele('email',  userObj[0].email);
 
-  console.log(userObj);
+  //console.log(userObj);
 
  res.header('Content-Type', 'text/xml');
- res.send(user.end({ pretty: true}));
+ res.send(userXml.end({ pretty: true}));
 });
 
 module.exports = router;
