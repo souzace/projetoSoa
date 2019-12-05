@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database(":memory:");
 var builder = require('xmlbuilder');
 
 var usersObj = [
@@ -21,7 +22,11 @@ for(var i = 0; i < usersObj.length; i++) {
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  //console.log(users);
+  db.serialize(function() {
+    db.all(`SELECT * FROM users`, function(err, rows){
+      console.log(rows);
+    });
+  });
  res.header('Content-Type', 'text/xml');
  res.send(users.end({ pretty: true}));
 });
@@ -29,19 +34,12 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
   
-  var id = usersObj.length + 1;
-  usersObj.push({
-    id: id,
-    name: req.body.name,
-    email: req.body.email,  
+  db.serialize(function() {
+      db.run(`INSERT INTO users (name, email)  
+              VALUES ('${req.body.name}', '${req.body.email}');`
+      );
   });
-
-  console.log(usersObj);
-  res.send({
-    id: id,
-    name: req.body.name,
-    email: req.body.email,  
-  }); 
+  res.send();
 });
 
 

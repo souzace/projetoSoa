@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('projetosoa:server');
 var http = require('http');
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database(":memory:");
 
 /**
  * Get port from environment and store in Express.
@@ -25,7 +27,15 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, () => {
+  db.serialize(() => {
+    db.run(`CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      email TEXT
+      );`);
+    console.log("Criado tabela usuarios");
+  });
+});
 server.on('error', onError);
 server.on('listening', onListening);
 
