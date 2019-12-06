@@ -7,8 +7,10 @@
 var app = require('../app');
 var debug = require('debug')('projetosoa:server');
 var http = require('http');
+const path = require('path')
+const dbPath = path.resolve(__dirname, '../soa.db');
 const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database(":memory:");
+const db = new sqlite3.Database(dbPath);
 
 /**
  * Get port from environment and store in Express.
@@ -29,7 +31,7 @@ var server = http.createServer(app);
 
 server.listen(port, () => {
   db.serialize(() => {
-    db.run(`CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       email TEXT
       );`);
