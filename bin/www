@@ -34,8 +34,26 @@ server.listen(port, () => {
     db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       email TEXT
+      );`);   
+
+    db.run(`CREATE TABLE IF NOT EXISTS devices (id INTEGER PRIMARY KEY AUTOINCREMENT,
+      tippingNumber INTEGER,
+      type TEXT,
+      name TEXT,
+      maker TEXT,
+      model TEXT,
+      operatingSystem TEXT
       );`);
-    console.log("Criado tabela usuarios");
+      
+    db.run(`CREATE TABLE IF NOT EXISTS leasedDevice (id INTEGER PRIMARY KEY AUTOINCREMENT,      
+      leaseDate String,
+      tippingNumber INTEGER,      
+      collaboratorName TEXT,
+      status TEXT,
+      devolutionDate TEXT
+      );`);
+
+    console.log("Created Tables");
   });
 });
 server.on('error', onError);
