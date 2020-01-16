@@ -13,19 +13,27 @@ let fs = require("fs");
     devices.att("xmlns", "http://www.w3.org/2005/Atom");
     db.serialize(function() {
       db.all(`SELECT * FROM devices ORDER BY id ASC`, function(err, rows) {
-        for (var i = 0; i < rows.length; i++) {
-          var deviceXml = devices.ele("device");
-          deviceXml.ele("id", rows[i].id);
-          deviceXml.ele("tippingNumber", rows[i].tippingNumber);
-          deviceXml.ele("type", rows[i].type);
-          deviceXml.ele("name", rows[i].name);
-          deviceXml.ele("maker", rows[i].maker);
-          deviceXml.ele("model", rows[i].model);
-          deviceXml.ele("operatingSystem", rows[i].operatingSystem);
-        }
-  
+        console.log(err);
         res.header("Content-Type", "text/xml");
-        res.send(deviceXml.end({ pretty: true }));
+        
+        var deviceXml = devices.ele("device");
+        if(rows.length){
+          for (var i = 0; i < rows.length; i++) {
+          
+            deviceXml.ele("id", rows[i].id);
+            deviceXml.ele("tippingNumber", rows[i].tippingNumber);
+            deviceXml.ele("typeDevice", rows[i].typeDevice);
+            deviceXml.ele("name", rows[i].name);
+            deviceXml.ele("maker", rows[i].maker);
+            deviceXml.ele("model", rows[i].model);
+            deviceXml.ele("operatingSystem", rows[i].operatingSystem);
+          }
+          res.send(deviceXml.end({ pretty: true }));
+        }
+        else{
+          res.send(deviceXml.end({ pretty: true }));
+        }
+
       });
     });
   });
@@ -33,8 +41,7 @@ let fs = require("fs");
   router.post("/", function(req, res, next) {
     db.serialize(function() {
       db.run(
-        `INSERT INTO devices (tippingNumber, type, name, maker, model, operatingSystem)  
-            VALUES ('${req.body.tippingNumber}', '${req.body.type}', '${req.body.name}', '${req.body.maker}', '${req.body.model}', '${req.body.operatingSystem}');`
+        `INSERT INTO devices (tippingNumber, typeDevice, name, maker, model, operatingSystem)  VALUES ('${req.body.tippingNumber}', '${req.body.typeDevice}','${req.body.name}','${req.body.maker}','${req.body.model}','${req.body.operatingSystem}');`
       );
       res.send();
     });
@@ -53,7 +60,7 @@ let fs = require("fs");
         var deviceXml = device.ele("device");
         deviceXml.ele("id", row[0].id);
         deviceXml.ele("tippingNumber", rows[0].tippingNumber);
-        deviceXml.ele("type", rows[0].type);
+        deviceXml.ele("typeDevice", rows[0].typeDevice);
         deviceXml.ele("name", rows[0].name);
         deviceXml.ele("maker", rows[0].maker);
         deviceXml.ele("model", rows[0].model);
@@ -71,7 +78,7 @@ let fs = require("fs");
   
     db.serialize(function() {
       db.run(
-        `UPDATE devices SET tippingNumber='${req.body.tippingNumber}', type='${req.body.type}' , name='${req.body.name}' , maker='${req.body.maker}' , model='${req.body.model}' , operatingSystem='${req.body.operatingSystem}' WHERE id = ${req.params.id}`,
+        `UPDATE devices SET tippingNumber='${req.body.tippingNumber}', typeDevice='${req.body.typeDevice}' , name='${req.body.name}' , maker='${req.body.maker}' , model='${req.body.model}' , operatingSystem='${req.body.operatingSystem}' WHERE id = ${req.params.id}`,
         function(err, row) {
           res.send();
         }

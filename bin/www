@@ -38,19 +38,19 @@ server.listen(port, () => {
 
     db.run(`CREATE TABLE IF NOT EXISTS devices (id INTEGER PRIMARY KEY AUTOINCREMENT,
       tippingNumber INTEGER,
-      type TEXT,
+      typeDevice TEXT,
       name TEXT,
       maker TEXT,
       model TEXT,
       operatingSystem TEXT
       );`);
       
-    db.run(`CREATE TABLE IF NOT EXISTS leasedDevice (id INTEGER PRIMARY KEY AUTOINCREMENT,      
-      leaseDate String,
+    db.run(`CREATE TABLE IF NOT EXISTS leasedDevices (id INTEGER PRIMARY KEY AUTOINCREMENT,      
+      leaseDate TEXT,
       tippingNumber INTEGER,      
       collaboratorName TEXT,
-      status TEXT,
-      devolutionDate TEXT
+      status TEXT DEFAULT Aguardando_Entrega,
+      devolutionDate TEXT DEFAULT _
       );`);
 
     console.log("Created Tables");
