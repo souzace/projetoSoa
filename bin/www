@@ -45,12 +45,13 @@ server.listen(port, () => {
       operatingSystem TEXT
       );`);
       
-    db.run(`CREATE TABLE IF NOT EXISTS leasedDevices (id INTEGER PRIMARY KEY AUTOINCREMENT,      
+    db.run(`CREATE TABLE IF NOT EXISTS leasedDevices (id INTEGER PRIMARY KEY AUTOINCREMENT,  
+      deviceId INTEGER,    
       leaseDate TEXT,
       tippingNumber INTEGER,      
       collaboratorName TEXT,
-      status TEXT DEFAULT Aguardando_Entrega,
-      devolutionDate TEXT DEFAULT _
+      status TEXT DEFAULT 'Aguardando_Entrega',
+      devolutionDate TEXT DEFAULT '00/00/00'
       );`);
 
     console.log("Created Tables");

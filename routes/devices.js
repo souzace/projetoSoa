@@ -13,13 +13,8 @@ let fs = require("fs");
     devices.att("xmlns", "http://www.w3.org/2005/Atom");
     db.serialize(function() {
       db.all(`SELECT * FROM devices ORDER BY id ASC`, function(err, rows) {
-        console.log(err);
-        res.header("Content-Type", "text/xml");
-        
-        var deviceXml = devices.ele("device");
-        if(rows.length){
-          for (var i = 0; i < rows.length; i++) {
-          
+        for (var i = 0; i < rows.length; i++) {
+          var deviceXml = devices.ele("device");
             deviceXml.ele("id", rows[i].id);
             deviceXml.ele("tippingNumber", rows[i].tippingNumber);
             deviceXml.ele("typeDevice", rows[i].typeDevice);
@@ -27,12 +22,10 @@ let fs = require("fs");
             deviceXml.ele("maker", rows[i].maker);
             deviceXml.ele("model", rows[i].model);
             deviceXml.ele("operatingSystem", rows[i].operatingSystem);
-          }
-          res.send(deviceXml.end({ pretty: true }));
         }
-        else{
-          res.send(deviceXml.end({ pretty: true }));
-        }
+  
+        res.header("Content-Type", "text/xml");
+        (deviceXml) ? res.send(deviceXml.end({ pretty: true })) : res.send({});
 
       });
     });
@@ -56,15 +49,14 @@ let fs = require("fs");
         err,
         row
       ) {
-        console.log(row);
         var deviceXml = device.ele("device");
         deviceXml.ele("id", row[0].id);
-        deviceXml.ele("tippingNumber", rows[0].tippingNumber);
-        deviceXml.ele("typeDevice", rows[0].typeDevice);
-        deviceXml.ele("name", rows[0].name);
-        deviceXml.ele("maker", rows[0].maker);
-        deviceXml.ele("model", rows[0].model);
-        deviceXml.ele("operatingSystem", rows[0].operatingSystem);  
+        deviceXml.ele("tippingNumber", row[0].tippingNumber);
+        deviceXml.ele("typeDevice", row[0].typeDevice);
+        deviceXml.ele("name", row[0].name);
+        deviceXml.ele("maker", row[0].maker);
+        deviceXml.ele("model", row[0].model);
+        deviceXml.ele("operatingSystem", row[0].operatingSystem);
   
         res.header("Content-Type", "text/xml");
         res.send(deviceXml.end({ pretty: true }));
