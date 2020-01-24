@@ -63,7 +63,7 @@ router.get("/:id", function(req, res, next) {
     });
 });
 
-router.patch("/:id", function(req, res, next) {
+router.put("/:id", function(req, res, next) {
     var leasedDevice = builder.create("leasedDevice", { encoding: "utf-8" });
     leasedDevice.att("xmlns", "http://www.w3.org/2005/Atom");
   
